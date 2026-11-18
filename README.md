@@ -22,6 +22,12 @@ flowchart LR
   APP --> GE
 ```
 
+## 画面
+
+| 訪問優先度リストと訪問準備 | AI の訪問プラン | Genie に聞く |
+|---|---|---|
+| ![list](docs/images/01_list.png) | ![plan](docs/images/03_plan_only.png) | ![genie](docs/images/04_genie.png) |
+
 ## 6つの要素と、デモで見せる場所
 
 | 要素 | 中身 | 見せる場所 |

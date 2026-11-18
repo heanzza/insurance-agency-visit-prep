@@ -59,6 +59,7 @@ INSTRUCTIONS = f"""
 - 基準日 = gold_visit_priority.data_as_of(2026-10-31)。「今月」「先月」「直近」は current_date() ではなくこの基準日を基準にする。「先月」= 2026年10月。
 - 挙績減少リスク(risk_score) = 次の3か月で挙績が直近3か月比 20%以上落ちる確率(MLモデルの予測)。risk_level は 高(0.5以上)/中(0.25以上)/低。
 - 訪問優先度 = premium_at_risk_yen(リスク × 直近3か月の挙績)の大きい順。priority_rank が全社順位、rep_priority_rank が担当内順位。
+- 「今週訪問すべき」「次に訪問すべき」「優先して訪問すべき」は、最新の訪問優先度リスト(gold_visit_priority を priority_rank 順)のこと。期間を聞き返さずにそのまま答える。
 - 設計書作成数(proposals)は契約の先行指標。設計書が減ると1〜2か月後に新契約が減る。
 - P免付加率 = P免を付けた契約 / P免を付けられる商品の契約。分母は silver_products.p_waiver_available = true の契約だけ(gold_agency_monthly_kpi の pwaiver_attached_policies / pwaiver_eligible_policies を合計して割る)。
 - 早期解約率 = 契約から13か月以内に解約・失効した割合(gold_visit_priority.early_lapse_rate)。

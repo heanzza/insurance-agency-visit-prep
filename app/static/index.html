@@ -95,6 +95,8 @@ const man = y => y == null ? '-' : (y / 10000).toLocaleString('ja-JP', {maximumF
 const pct = (x, sign) => x == null ? '-' : ((sign && x > 0 ? '+' : '') + (x * 100).toFixed(1) + '%');
 const cls = x => x == null ? '' : (x >= 0 ? 'up' : 'down');
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// minimal markdown for Genie answers: escape first, then **bold** and '- ' bullets
+const md = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/^- /gm, '・');
 async function api(path, opt) {
   const r = await fetch(path, opt);
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.statusText);
@@ -238,7 +240,7 @@ async function askGenie(q) {
     const r = await api('/api/genie', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({question: q, conversation_id: state.conv})});
     state.conv = r.conversation_id;
     const tbl = r.columns.length ? `<table><tr>${r.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${r.rows.slice(0, 15).map(row => `<tr>${row.map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</table>` : '';
-    $('#pending').outerHTML = `<div class="msg a">${esc(r.text.join('\n\n'))}${tbl}${r.sql ? `<details><summary>生成された SQL</summary><pre>${esc(r.sql)}</pre></details>` : ''}</div>`;
+    $('#pending').outerHTML = `<div class="msg a">${md(r.text.join('\n\n'))}${tbl}${r.sql ? `<details><summary>生成された SQL</summary><pre>${esc(r.sql)}</pre></details>` : ''}</div>`;
   } catch (e) { $('#pending').outerHTML = `<div class="msg a">エラー: ${esc(e.message)}</div>`; }
 }
 $('#gsend').onclick = () => askGenie(); $('#gq').onkeydown = e => { if (e.key === 'Enter' && !e.isComposing) askGenie(); };
