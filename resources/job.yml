@@ -1,0 +1,46 @@
+resources:
+  jobs:
+    agency_visit_e2e:
+      name: agency-visit-prep-e2e
+      description: 代理店訪問準備デモの End-to-End(合成データ → Lakeflow → UC → ML/GenAI → Lakebase)
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+      tasks:
+        - task_key: uc_setup
+          notebook_task:
+            notebook_path: ../src/00_uc_setup.sql
+            warehouse_id: ${var.warehouse_id}
+        - task_key: generate_raw_data
+          depends_on: [{task_key: uc_setup}]
+          notebook_task:
+            notebook_path: ../src/01_generate_raw_data.py
+        - task_key: lakeflow_pipeline
+          depends_on: [{task_key: generate_raw_data}]
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.agency_visit_pipeline.id}
+            full_refresh: true
+        - task_key: uc_governance
+          depends_on: [{task_key: lakeflow_pipeline}]
+          notebook_task:
+            notebook_path: ../src/02_uc_governance.py
+        - task_key: train_risk_model
+          depends_on: [{task_key: lakeflow_pipeline}]
+          notebook_task:
+            notebook_path: ../src/03_train_risk_model.py
+        - task_key: genai_visit_notes
+          depends_on: [{task_key: lakeflow_pipeline}]
+          notebook_task:
+            notebook_path: ../src/04_genai_visit_notes.sql
+            warehouse_id: ${var.warehouse_id}
+        - task_key: build_visit_priority
+          depends_on: [{task_key: train_risk_model}, {task_key: genai_visit_notes}, {task_key: uc_governance}]
+          notebook_task:
+            notebook_path: ../src/05_build_visit_priority.sql
+            warehouse_id: ${var.warehouse_id}
+        - task_key: lakebase_sync
+          depends_on: [{task_key: build_visit_priority}]
+          notebook_task:
+            notebook_path: ../src/06_lakebase_sync.py

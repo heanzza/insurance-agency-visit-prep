@@ -1,0 +1,21 @@
+resources:
+  pipelines:
+    agency_visit_pipeline:
+      name: agency-visit-prep-pipeline
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      channel: CURRENT
+      photon: true
+      continuous: false
+      configuration:
+        raw_path: /Volumes/${var.catalog}/${var.schema}/raw
+        catalog: ${var.catalog}
+        schema: ${var.schema}
+      libraries:
+        - file:
+            path: ../src/pipeline/01_bronze.sql
+        - file:
+            path: ../src/pipeline/02_silver.sql
+        - file:
+            path: ../src/pipeline/03_gold.sql

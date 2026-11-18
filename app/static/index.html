@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代理店訪問準備 | ひなた生命</title>
+<style>
+  :root { --ink:#1B3139; --sub:#5A6F77; --line:#E3E8EA; --bg:#F6F7F8; --card:#fff; --accent:#FF3621; --hi:#D92D20; --mid:#E8A317; --lo:#2E7D5B; --blue:#2563EB; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: "Hiragino Sans","Noto Sans JP",system-ui,sans-serif; color:var(--ink); background:var(--bg); font-size:14px; }
+  header { display:flex; align-items:center; gap:16px; padding:10px 20px; background:var(--ink); color:#fff; }
+  header h1 { font-size:17px; margin:0; font-weight:700; }
+  header .tag { font-size:11px; opacity:.7; }
+  header .sp { flex:1; }
+  header select { padding:6px 8px; border-radius:6px; border:0; font-size:13px; }
+  nav { display:flex; gap:4px; padding:0 20px; background:#fff; border-bottom:1px solid var(--line); }
+  nav button { border:0; background:none; padding:12px 14px; font-size:14px; cursor:pointer; color:var(--sub); border-bottom:3px solid transparent; }
+  nav button.on { color:var(--ink); border-bottom-color:var(--accent); font-weight:700; }
+  main { padding:16px 20px; }
+  .grid { display:grid; grid-template-columns: 420px 1fr; gap:16px; align-items:start; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .card h2 { font-size:15px; margin:0 0 10px; }
+  .kpis { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-bottom:16px; }
+  .kpi .v { font-size:22px; font-weight:700; } .kpi .l { font-size:12px; color:var(--sub); }
+  .list { max-height: calc(100vh - 260px); overflow:auto; }
+  .row { padding:10px 8px; border-bottom:1px solid var(--line); cursor:pointer; display:grid; grid-template-columns: 34px 1fr auto; gap:8px; align-items:center; }
+  .row:hover { background:#FAFBFB; } .row.sel { background:#FFF4F2; }
+  .rank { font-weight:700; color:var(--sub); text-align:center; }
+  .name { font-weight:700; } .meta { font-size:12px; color:var(--sub); margin-top:2px; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:700; color:#fff; }
+  .b-高 { background:var(--hi); } .b-中 { background:var(--mid); } .b-低 { background:var(--lo); }
+  .amt { text-align:right; font-weight:700; } .amt small { display:block; font-weight:400; color:var(--sub); font-size:11px; }
+  .chips span { display:inline-block; background:#F1F3F4; border-radius:6px; padding:2px 6px; margin:3px 4px 0 0; font-size:12px; }
+  .stats { display:grid; grid-template-columns: repeat(4,1fr); gap:8px; margin:10px 0; }
+  .stat { background:#F8FAFA; border-radius:8px; padding:8px 10px; } .stat .v { font-size:17px; font-weight:700; } .stat .l { font-size:11px; color:var(--sub); }
+  .up { color:var(--lo); } .down { color:var(--hi); }
+  .note { background:#FFFBEB; border-left:4px solid var(--mid); padding:8px 12px; border-radius:6px; margin:10px 0; line-height:1.6; }
+  button.primary { background:var(--accent); color:#fff; border:0; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px; }
+  button.primary:disabled { opacity:.5; cursor:wait; }
+  button.ghost { background:#fff; border:1px solid var(--line); padding:8px 14px; border-radius:8px; cursor:pointer; }
+  .plan h3 { font-size:14px; margin:14px 0 6px; border-left:4px solid var(--accent); padding-left:8px; }
+  .plan ul { margin:4px 0; padding-left:20px; line-height:1.7; }
+  .plan .headline { font-size:16px; font-weight:700; background:#F1F5F9; padding:10px 12px; border-radius:8px; }
+  .plan table { border-collapse:collapse; width:100%; } .plan td { border-bottom:1px solid var(--line); padding:5px 6px; vertical-align:top; }
+  .muted { color:var(--sub); font-size:12px; }
+  .flex { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  textarea, input[type=text], select.f { width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  .chat { max-width: 1100px; }
+  .msg { margin:12px 0; } .msg.q { text-align:right; } .msg.q span { background:var(--ink); color:#fff; padding:8px 12px; border-radius:12px; display:inline-block; }
+  .msg.a { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 14px; line-height:1.7; white-space:pre-wrap; }
+  .msg.a table { border-collapse:collapse; margin-top:8px; font-size:12px; white-space:normal; } .msg.a td,.msg.a th { border:1px solid var(--line); padding:4px 6px; text-align:left; }
+  details summary { cursor:pointer; color:var(--sub); font-size:12px; margin-top:6px; } pre { background:#0F172A; color:#E2E8F0; padding:10px; border-radius:6px; overflow:auto; font-size:12px; white-space:pre-wrap; }
+  .samples button { margin:4px 6px 0 0; }
+  .hidden { display:none; }
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid #fff; border-right-color:transparent; border-radius:50%; animation:spin 1s linear infinite; vertical-align:-2px; margin-right:6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>代理店訪問準備</h1><div class="tag">ひなた生命(架空)・代理店営業部 ／ 合成データによるデモ</div></div>
+  <div class="sp"></div>
+  <label style="font-size:12px">担当営業 <select id="rep"><option value="">全員</option></select></label>
+  <div id="me" style="font-size:12px;opacity:.8"></div>
+</header>
+<nav>
+  <button data-tab="prep" class="on">訪問準備</button>
+  <button data-tab="genie">Genie に聞く</button>
+  <button data-tab="log">利用ログ</button>
+</nav>
+<main>
+  <section id="tab-prep">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid">
+      <div class="card"><h2>訪問優先度リスト <span class="muted" id="lat"></span></h2>
+        <div class="muted" style="margin-bottom:6px">並び順 = 挙績減少リスク(ML) × 直近3か月の挙績 = 守るべき挙績の大きい順</div>
+        <div class="list" id="list"></div></div>
+      <div id="detail" class="card"><div class="muted">左のリストから代理店を選んでください。</div></div>
+    </div>
+  </section>
+  <section id="tab-genie" class="hidden chat">
+    <div class="card"><h2>Genie Agent「代理店営業アシスタント」</h2>
+      <div class="muted">Unity Catalog の Gold テーブル(挙績・設計書・訪問・解約・MLリスク・訪問メモのAI分類)に自然言語で質問できます。</div>
+      <div class="samples" id="samples"></div>
+      <div id="msgs"></div>
+      <div class="flex" style="margin-top:10px"><input type="text" id="gq" placeholder="例: 設計書作成数が大きく減っている代理店は？" style="flex:1">
+        <button class="primary" id="gsend">送信</button><button class="ghost" id="greset">新しい会話</button></div>
+    </div>
+  </section>
+  <section id="tab-log" class="hidden"><div class="card"><h2>保存された訪問プラン(Lakebase app_ops.visit_plans)</h2><div id="logs"></div></div></section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const man = y => y == null ? '-' : (y / 10000).toLocaleString('ja-JP', {maximumFractionDigits: 1}) + '万円';
+const pct = (x, sign) => x == null ? '-' : ((sign && x > 0 ? '+' : '') + (x * 100).toFixed(1) + '%');
+const cls = x => x == null ? '' : (x >= 0 ? 'up' : 'down');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(path, opt) {
+  const r = await fetch(path, opt);
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.statusText);
+  return r.json();
+}
+let state = { items: [], sel: null, plan: null, conv: null };
+
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  ['prep', 'genie', 'log'].forEach(t => $('#tab-' + t).classList.toggle('hidden', t !== b.dataset.tab));
+  if (b.dataset.tab === 'log') loadLog();
+});
+
+async function init() {
+  const me = await api('/api/me'); $('#me').textContent = me.user;
+  const reps = await api('/api/reps');
+  reps.forEach(r => $('#rep').insertAdjacentHTML('beforeend', `<option value="${r.rep_id}">${esc(r.rep_name)}(${esc(r.branch)})</option>`));
+  $('#rep').onchange = loadList;
+  ['今週訪問すべき代理店トップ5とその理由は？', '設計書作成数が大きく減っている代理店は？', '直近の訪問メモで募集人の退職や人手不足の話が出た代理店は？', '担当営業ごとに、リスク高の代理店数と守るべき挙績を出して', '解約の理由で一番多いものは？']
+    .forEach(q => { const b = document.createElement('button'); b.className = 'ghost'; b.textContent = q; b.onclick = () => askGenie(q); $('#samples').appendChild(b); });
+  loadList();
+}
+
+async function loadList() {
+  const rep = $('#rep').value;
+  const d = await api('/api/agencies' + (rep ? '?rep_id=' + rep : ''));
+  state.items = d.items;
+  $('#lat').textContent = `(Lakebase ${d.latency_ms}ms)`;
+  const hi = d.items.filter(a => a.risk_level === '高').length;
+  const risk = d.items.reduce((s, a) => s + (a.premium_at_risk_yen || 0), 0);
+  const stale = d.items.filter(a => a.days_since_last_visit >= 45).length;
+  $('#kpis').innerHTML = [
+    ['担当代理店', d.items.length + '社'], ['リスク「高」', hi + '社'], ['守るべき挙績(合計)', man(risk)], ['45日以上 未訪問', stale + '社']]
+    .map(([l, v]) => `<div class="card kpi"><div class="l">${l}</div><div class="v">${v}</div></div>`).join('') ;
+  $('#list').innerHTML = d.items.map(a => {
+    const dr = JSON.parse(a.risk_drivers || '[]');
+    return `<div class="row" data-id="${a.agency_id}">
+      <div class="rank">${rep ? a.rep_priority_rank : a.priority_rank}</div>
+      <div><div class="name">${esc(a.agency_name)} <span class="badge b-${a.risk_level}">${a.risk_level}</span></div>
+        <div class="meta">${esc(a.rep_name)} ／ ${esc(a.channel_type)} ／ 前年比 <span class="${cls(a.fytd_yoy)}">${pct(a.fytd_yoy, 1)}</span></div>
+        <div class="chips">${dr.slice(0, 2).map(x => `<span>${esc(x)}</span>`).join('')}</div></div>
+      <div class="amt">${man(a.premium_at_risk_yen)}<small>リスク ${(a.risk_score * 100).toFixed(0)}%</small></div></div>`;
+  }).join('');
+  document.querySelectorAll('.row').forEach(r => r.onclick = () => select(r.dataset.id));
+  if (d.items.length) select(state.sel && d.items.find(a => a.agency_id === state.sel) ? state.sel : d.items[0].agency_id);
+}
+
+function chart(kpi) {
+  const W = 640, H = 160, P = 30, n = kpi.length;
+  const maxP = Math.max(...kpi.map(k => Math.max(k.premium_yen, k.target_premium_yen || 0)), 1);
+  const maxR = Math.max(...kpi.map(k => k.proposals), 1);
+  const x = i => P + i * (W - 2 * P) / Math.max(n - 1, 1);
+  const bw = (W - 2 * P) / n * 0.6;
+  const bars = kpi.map((k, i) => `<rect x="${x(i) - bw / 2}" y="${H - P - (H - 2 * P) * k.premium_yen / maxP}" width="${bw}" height="${(H - 2 * P) * k.premium_yen / maxP}" fill="#A0ACBE"><title>${k.month.slice(0, 7)} 挙績 ${man(k.premium_yen)}</title></rect>`).join('');
+  const tgt = kpi.map((k, i) => k.target_premium_yen ? `${x(i)},${H - P - (H - 2 * P) * k.target_premium_yen / maxP}` : '').filter(Boolean).join(' ');
+  const line = kpi.map((k, i) => `${x(i)},${H - P - (H - 2 * P) * k.proposals / maxR}`).join(' ');
+  const labels = kpi.map((k, i) => i % 2 ? '' : `<text x="${x(i)}" y="${H - 10}" font-size="10" text-anchor="middle" fill="#5A6F77">${k.month.slice(2, 7)}</text>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%">${bars}<polyline points="${tgt}" fill="none" stroke="#1B3139" stroke-dasharray="4 3"/>
+    <polyline points="${line}" fill="none" stroke="#FF3621" stroke-width="2"/>${labels}</svg>
+    <div class="muted">■ 挙績(月次) ／ <span style="color:#1B3139">- - 目標</span> ／ <span style="color:#FF3621">― 設計書作成数(先行指標)</span></div>`;
+}
+
+async function select(id) {
+  state.sel = id; state.plan = null;
+  document.querySelectorAll('.row').forEach(r => r.classList.toggle('sel', r.dataset.id === id));
+  const d = await api('/api/agencies/' + id);
+  const a = d.agency, dr = JSON.parse(a.risk_drivers || '[]');
+  $('#detail').innerHTML = `
+    <div class="flex"><h2 style="margin:0">${esc(a.agency_name)}</h2><span class="badge b-${a.risk_level}">挙績減少リスク ${a.risk_level}(${(a.risk_score * 100).toFixed(0)}%)</span>
+      <span class="muted">${esc(a.channel_type)} ／ ${esc(a.prefecture)} ／ 担当 ${esc(a.rep_name)} ／ 基準日 ${a.data_as_of} ／ Lakebase ${d.latency_ms}ms</span></div>
+    <div class="stats">
+      <div class="stat"><div class="l">今年度累計 挙績</div><div class="v">${man(a.fytd_premium_yen)}</div></div>
+      <div class="stat"><div class="l">前年比(年度累計)</div><div class="v ${cls(a.fytd_yoy)}">${pct(a.fytd_yoy, 1)}</div></div>
+      <div class="stat"><div class="l">目標達成率</div><div class="v">${pct(a.fytd_achievement_rate)}</div></div>
+      <div class="stat"><div class="l">設計書(直近3か月)</div><div class="v ${cls(a.proposals_3m_change)}">${pct(a.proposals_3m_change, 1)}</div></div>
+      <div class="stat"><div class="l">最終訪問</div><div class="v">${a.days_since_last_visit}日前</div></div>
+      <div class="stat"><div class="l">募集人退職(6か月)</div><div class="v">${a.staff_departures_6m}名</div></div>
+      <div class="stat"><div class="l">早期解約率</div><div class="v">${pct(a.early_lapse_rate)}</div></div>
+      <div class="stat"><div class="l">P免付加率</div><div class="v">${pct(a.pwaiver_rate_fytd)}</div></div>
+    </div>
+    ${chart(d.kpi)}
+    <div style="margin-top:8px"><b>リスクの理由(ML)</b><div class="chips">${dr.map(x => `<span>${esc(x)}</span>`).join('') || '<span>特になし</span>'}</div></div>
+    <div class="note"><b>訪問メモの要点(GenAI 要約・直近90日)</b><br>${esc(a.note_summary || 'メモなし')}</div>
+    <div class="flex"><button class="primary" id="gen">訪問プランを生成</button><span class="muted">Claude が上のデータだけを根拠に作ります(10〜20秒)</span></div>
+    <div id="plan"></div>
+    <div id="hist">${history(d)}</div>`;
+  $('#gen').onclick = () => genPlan(id);
+}
+
+function history(d) {
+  if (!d.plans.length && !d.outcomes.length) return '';
+  return `<h3 style="font-size:14px;margin-top:18px">この代理店の履歴(Lakebase)</h3>` +
+    d.plans.map(p => `<div class="muted">📄 ${p.created_at.slice(0, 16).replace('T', ' ')} ${esc(p.created_by)} — ${esc(p.plan.headline || '')} [${esc(p.status)}]</div>`).join('') +
+    d.outcomes.map(o => `<div class="muted">✅ ${o.created_at.slice(0, 16).replace('T', ' ')} ${esc(o.created_by)} — 結果: ${esc(o.outcome)} ／ 次: ${esc(o.next_action || '')} ／ ${esc(o.memo || '')}</div>`).join('');
+}
+
+function renderPlan(p) {
+  if (p.raw) return `<pre>${esc(p.raw)}</pre>`;
+  const li = xs => `<ul>${(xs || []).map(x => `<li>${typeof x === 'string' ? esc(x) : `<b>${esc(x.point)}</b> — ${esc(x.evidence)}`}</li>`).join('')}</ul>`;
+  return `<div class="plan"><div class="headline">🎯 ${esc(p.headline)}</div>
+    <h3>現状</h3>${li(p.situation)}<h3>リスク</h3>${li(p.risks)}<h3>機会</h3>${li(p.opportunities)}
+    <h3>当日確認すべき質問</h3>${li(p.questions)}
+    <h3>アジェンダ</h3><table>${(p.agenda || []).map(a => `<tr><td style="width:60px">${a.minutes}分</td><td>${esc(a.topic)}</td></tr>`).join('')}</table>
+    <h3>提案・支援策</h3>${li(p.proposals)}
+    <h3>次回アクション</h3><table>${(p.next_actions || []).map(a => `<tr><td>${esc(a.action)}</td><td style="width:110px">${esc(a.owner)}</td><td style="width:110px">${esc(a.due)}</td></tr>`).join('')}</table></div>`;
+}
+
+async function genPlan(id) {
+  const b = $('#gen'); b.disabled = true; b.innerHTML = '<span class="spinner"></span>生成中…';
+  try {
+    const r = await api('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({agency_id: id})});
+    state.plan = r;
+    $('#plan').innerHTML = `<div class="muted" style="margin:8px 0">${r.model} ／ ${(r.generation_ms / 1000).toFixed(1)}秒で生成</div>${renderPlan(r.plan)}
+      <div class="card" style="margin-top:12px;background:#FAFBFB"><div class="flex"><label>訪問予定日 <input type="date" id="vdate"></label>
+        <button class="primary" id="save">プランを保存(Lakebase)</button><span id="saved" class="muted"></span></div></div>`;
+    $('#save').onclick = savePlan;
+  } catch (e) { $('#plan').innerHTML = `<div class="note">生成に失敗しました: ${esc(e.message)}</div>`; }
+  b.disabled = false; b.textContent = '訪問プランを再生成';
+}
+
+async function savePlan() {
+  const r = await api('/api/plans', {method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({agency_id: state.sel, plan: state.plan.plan, visit_date: $('#vdate').value || null, model: state.plan.model, generation_ms: state.plan.generation_ms})});
+  $('#saved').innerHTML = `保存しました(plan_id=${r.plan_id})`;
+  $('#plan').insertAdjacentHTML('beforeend', `<div class="card" style="margin-top:12px"><h2>訪問後: 結果を記録</h2>
+    <select class="f" id="oc"><option>前向き(施策に合意)</option><option>現状維持</option><option>懸念あり(要フォロー)</option><option>不在・延期</option></select>
+    <input type="text" id="na" placeholder="次回アクション(例: 11/末までに介護一時金の勉強会を実施)" style="margin-top:6px">
+    <textarea id="memo" rows="3" placeholder="訪問メモ" style="margin-top:6px"></textarea>
+    <button class="primary" id="saveo" style="margin-top:6px">結果を保存</button> <span id="savedo" class="muted"></span></div>`);
+  $('#saveo').onclick = async () => {
+    const o = await api('/api/outcomes', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({agency_id: state.sel, plan_id: r.plan_id, outcome: $('#oc').value, next_action: $('#na').value, memo: $('#memo').value})});
+    $('#savedo').textContent = `保存しました(outcome_id=${o.outcome_id})`;
+  };
+}
+
+async function askGenie(q) {
+  q = q || $('#gq').value.trim(); if (!q) return; $('#gq').value = '';
+  $('#msgs').insertAdjacentHTML('beforeend', `<div class="msg q"><span>${esc(q)}</span></div><div class="msg a" id="pending"><span class="muted">Genie が考えています…</span></div>`);
+  try {
+    const r = await api('/api/genie', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({question: q, conversation_id: state.conv})});
+    state.conv = r.conversation_id;
+    const tbl = r.columns.length ? `<table><tr>${r.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${r.rows.slice(0, 15).map(row => `<tr>${row.map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</table>` : '';
+    $('#pending').outerHTML = `<div class="msg a">${esc(r.text.join('\n\n'))}${tbl}${r.sql ? `<details><summary>生成された SQL</summary><pre>${esc(r.sql)}</pre></details>` : ''}</div>`;
+  } catch (e) { $('#pending').outerHTML = `<div class="msg a">エラー: ${esc(e.message)}</div>`; }
+}
+$('#gsend').onclick = () => askGenie(); $('#gq').onkeydown = e => { if (e.key === 'Enter' && !e.isComposing) askGenie(); };
+$('#greset').onclick = () => { state.conv = null; $('#msgs').innerHTML = ''; };
+
+async function loadLog() {
+  const xs = await api('/api/activity');
+  $('#logs').innerHTML = xs.length ? `<table class="plan" style="width:100%">${xs.map(x => `<tr><td>${x.created_at.slice(0, 16).replace('T', ' ')}</td><td>${esc(x.agency_name)}</td><td>${esc(x.headline)}</td><td>${esc(x.created_by)}</td><td>${esc(x.status)}</td><td>${(x.generation_ms / 1000).toFixed(1)}秒</td></tr>`).join('')}</table>` : '<div class="muted">まだありません</div>';
+}
+init().catch(e => { $('#detail').innerHTML = `<div class="note">読み込みに失敗しました: ${esc(e.message)}</div>`; });
+</script>
+</body>
+</html>

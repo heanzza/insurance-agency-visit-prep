@@ -1,0 +1,26 @@
+bundle:
+  name: insurance-agency-visit-prep
+
+variables:
+  catalog:
+    default: jp_fsi_catalog
+  schema:
+    default: agency_visit_prep
+  warehouse_id:
+    description: SQL warehouse for SQL notebook tasks (looked up by name)
+    lookup:
+      warehouse: Serverless Starter Warehouse
+  lakebase_project:
+    default: agency-visit-prep
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      profile: jp-fsi
+    presets:
+      name_prefix: ""
